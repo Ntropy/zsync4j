@@ -38,8 +38,8 @@ import com.salesforce.zsync.internal.util.HttpClient.HttpTransferListener;
 import com.salesforce.zsync.internal.util.HttpClient.RangeReceiver;
 import com.salesforce.zsync.internal.util.HttpClient.RangeTransferListener;
 import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListener;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 /**
@@ -93,8 +93,8 @@ public class EventDispatcher {
       @Override
       public void initiating(Request request) {
         try {
-          EventDispatcher.this.observer.controlFileDownloadingInitiated(request.uri());
-        } catch (IOException e) {
+          EventDispatcher.this.observer.controlFileDownloadingInitiated(request.url().uri());
+        } catch (Exception e) {
           throw new RuntimeException(e);
         }
       }
@@ -102,8 +102,8 @@ public class EventDispatcher {
       @Override
       public void start(Response response, long length) {
         try {
-          EventDispatcher.this.observer.controlFileDownloadingStarted(response.request().uri(), length);
-        } catch (IOException e) {
+          EventDispatcher.this.observer.controlFileDownloadingStarted(response.request().url().uri(), length);
+        } catch (Exception e) {
           throw new RuntimeException(e);
         }
       }
@@ -167,8 +167,8 @@ public class EventDispatcher {
           @Override
           public void initiating(Request request) {
             try {
-              EventDispatcher.this.observer.remoteFileDownloadingInitiated(request.uri(), ranges);
-            } catch (IOException e) {
+              EventDispatcher.this.observer.remoteFileDownloadingInitiated(request.url().uri(), ranges);
+            } catch (Exception e) {
               throw new RuntimeException(e);
             }
           }
@@ -176,9 +176,9 @@ public class EventDispatcher {
           @Override
           public void start(Response resource, long length) {
             try {
-              EventDispatcher.this.observer.remoteFileDownloadingStarted(resource.request().uri(), resource.body()
+              EventDispatcher.this.observer.remoteFileDownloadingStarted(resource.request().url().uri(), resource.body()
                   .contentLength());
-            } catch (IOException e) {
+            } catch (Exception e) {
               throw new RuntimeException(e);
             }
           }

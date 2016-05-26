@@ -26,7 +26,7 @@
 package com.salesforce.zsync.internal.util;
 
 import static com.google.common.collect.ImmutableList.of;
-import static com.squareup.okhttp.Protocol.HTTP_1_1;
+import static okhttp3.Protocol.HTTP_1_1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -45,8 +45,8 @@ import com.salesforce.zsync.internal.util.EventLogHttpTransferListener.Closed;
 import com.salesforce.zsync.internal.util.EventLogHttpTransferListener.Started;
 import com.salesforce.zsync.internal.util.EventLogHttpTransferListener.Transferred;
 import com.salesforce.zsync.internal.util.ObservableInputStream.ObservableResourceInputStream;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ObservableInputStreamTest {
 

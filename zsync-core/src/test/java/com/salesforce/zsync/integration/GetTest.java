@@ -38,7 +38,7 @@ import org.junit.Test;
 
 import com.salesforce.zsync.Zsync;
 import com.salesforce.zsync.Zsync.Options;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 /**
  * Describe your class here.

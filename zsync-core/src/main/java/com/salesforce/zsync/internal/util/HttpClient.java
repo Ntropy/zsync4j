@@ -41,7 +41,6 @@ import static java.util.Collections.newSetFromMap;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Proxy;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,13 +59,14 @@ import com.salesforce.zsync.http.ContentRange;
 import com.salesforce.zsync.http.Credentials;
 import com.salesforce.zsync.internal.util.ObservableInputStream.ObservableResourceInputStream;
 import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListener;
-import com.squareup.okhttp.Authenticator;
-import com.squareup.okhttp.Challenge;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Request.Builder;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
+import okhttp3.Authenticator;
+import okhttp3.Challenge;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okhttp3.Route;
 
 /**
  * A thin wrapper around {@link OkHttpClient} to facilitate full and partial download of resources
@@ -77,11 +77,28 @@ import com.squareup.okhttp.ResponseBody;
 public class HttpClient {
 
   public static HttpClient newHttpClient() {
-    return new HttpClient(new OkHttpClient());
+	// setting authenticator to null, so it does not delegate to java Authenticator
+    return new HttpClient(new OkHttpClient.Builder().authenticator(new Authenticator() {
+		
+		@Override
+		public Request authenticate(Route route, Response response) throws IOException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}).build());
   }
 
   public static HttpClient newHttpClient(OkHttpClient okHttpClient) {
-    return new HttpClient(okHttpClient.clone());
+	// setting authenticator to null, so it does not delegate to java Authenticator
+	OkHttpClient clone = okHttpClient.newBuilder().authenticator(new Authenticator() {
+		
+		@Override
+		public Request authenticate(Route route, Response response) throws IOException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}).build();
+    return new HttpClient(clone);
   }
 
   /**
@@ -132,18 +149,6 @@ public class HttpClient {
     checkArgument(okHttpClient != null, "httpClient cannot be null");
     this.okHttpClient = okHttpClient;
     this.basicChallengeReceived = newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-    // setting authenticator to null, so it does not delegate to java Authenticator
-    this.okHttpClient.setAuthenticator(new Authenticator() {
-      @Override
-      public Request authenticateProxy(Proxy proxy, Response response) throws IOException {
-        return null;
-      }
-
-      @Override
-      public Request authenticate(Proxy proxy, Response response) throws IOException {
-        return null;
-      }
-    });
   }
 
   /**
@@ -238,7 +243,7 @@ public class HttpClient {
         break;
       }
       // if we are receiving a basic authorization challenges, set header and retry
-      final String host = response.request().uri().getHost();
+      final String host = response.request().url().host();
       this.basicChallengeReceived.add(host);
       final Credentials creds = credentials.get(host);
       if (creds == null) {
@@ -268,7 +273,7 @@ public class HttpClient {
 
   static boolean containsBasic(Iterable<? extends Challenge> challenges) {
     for (Challenge challenge : challenges) {
-      if ("Basic".equalsIgnoreCase(challenge.getScheme())) {
+      if ("Basic".equalsIgnoreCase(challenge.scheme())) {
         return true;
       }
     }

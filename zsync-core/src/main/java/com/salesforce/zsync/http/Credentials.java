@@ -50,7 +50,7 @@ public class Credentials {
    * @return
    */
   public String basic() {
-    return com.squareup.okhttp.Credentials.basic(this.username, this.password);
+    return okhttp3.Credentials.basic(this.username, this.password);
   }
 
 }

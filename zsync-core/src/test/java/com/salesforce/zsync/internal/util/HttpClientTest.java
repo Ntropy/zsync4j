@@ -28,7 +28,7 @@ package com.salesforce.zsync.internal.util;
 import static com.salesforce.zsync.internal.util.HttpClient.getBoundary;
 import static com.salesforce.zsync.internal.util.HttpClient.parseContentRange;
 import static com.salesforce.zsync.internal.util.HttpClient.parseContentType;
-import static com.squareup.okhttp.Protocol.HTTP_1_1;
+import static okhttp3.Protocol.HTTP_1_1;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
@@ -72,12 +72,12 @@ import com.salesforce.zsync.internal.util.HttpClient.HttpError;
 import com.salesforce.zsync.internal.util.HttpClient.HttpTransferListener;
 import com.salesforce.zsync.internal.util.HttpClient.RangeReceiver;
 import com.salesforce.zsync.internal.util.HttpClient.RangeTransferListener;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Protocol;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class HttpClientTest {
 
@@ -330,7 +330,7 @@ public class HttpClientTest {
     final Function<Request, Call> noAuthRequest = new Function<Request, Call>() {
       @Override
       public Call apply(Request request) {
-        assertEquals(uri.toString(), request.urlString());
+        assertEquals(uri.toString(), request.url().toString());
         assertEquals("GET", request.method());
         assertNull(request.header("Authorization"));
 
@@ -353,7 +353,7 @@ public class HttpClientTest {
     return new Function<Request, Call>() {
       @Override
       public Call apply(Request request) {
-        assertEquals(uri.toString(), request.urlString());
+        assertEquals(uri.toString(), request.url().toString());
         assertEquals("GET", request.method());
         assertEquals(credentials.get(uri.getHost()).basic(), request.header("Authorization"));
 

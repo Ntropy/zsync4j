@@ -45,7 +45,7 @@ public class CredentialsTest {
 
   @Test
   public void testBasic() {
-    assertEquals(com.squareup.okhttp.Credentials.basic("jdoe", "secret"), new Credentials("jdoe", "secret").basic());
+    assertEquals(okhttp3.Credentials.basic("jdoe", "secret"), new Credentials("jdoe", "secret").basic());
   }
 
 }

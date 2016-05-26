@@ -59,7 +59,7 @@ import com.salesforce.zsync.internal.util.HttpClient.HttpError;
 import com.salesforce.zsync.internal.util.HttpClient.HttpTransferListener;
 import com.salesforce.zsync.internal.util.ObservableRedableByteChannel.ObservableReadableResourceChannel;
 import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListener;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 /**
  * Zsync download client: reduces the number of bytes retrieved from a remote server by drawing unchanged parts of the

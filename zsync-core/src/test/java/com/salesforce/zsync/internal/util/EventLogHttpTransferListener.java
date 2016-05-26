@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.salesforce.zsync.internal.util.HttpClient.HttpTransferListener;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * A test utility class for recording listener events so that tests can assert the sequence of
@@ -89,9 +89,9 @@ class EventLogHttpTransferListener implements HttpTransferListener {
         return false;
       }
       try {
-        return r1.urlString().equals(r2.urlString()) && r1.uri().equals(r2.uri()) && r1.url().equals(r2.url())
+        return r1.url().toString().equals(r2.url().toString()) && r1.url().uri().equals(r2.url().uri()) && r1.url().equals(r2.url())
             && r1.method().equals(r2.method()) && r1.headers().names().equals(r2.headers().names());
-      } catch (IOException e) {
+      } catch (Exception e) {
         throw new RuntimeException(e);
       }
     }
@@ -204,8 +204,8 @@ class EventLogHttpTransferListener implements HttpTransferListener {
   @Override
   public void start(Response response, long totalBytes) {
     try {
-      this.eventLog.add(new Started(response.request().uri(), totalBytes));
-    } catch (IOException e) {
+      this.eventLog.add(new Started(response.request().url().uri(), totalBytes));
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
