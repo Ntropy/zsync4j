@@ -2,7 +2,7 @@ This is the forked verison of [zsync4j](https://github.com/SalesforceEng/zsync4j
 # Changlog:
 - adding gradle support
 - updating okhttp from 2.5 to 3.3.1
-- removing Integration Test that needs jetty framewokr of Eclipse
+- removing Integration Test that needs jetty framework of Eclipse
 
 ---
 
