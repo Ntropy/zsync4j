@@ -1,0 +1,4 @@
+rootProject.name = 'zsync-parent'
+include ':zsync-core'
+
+project(':zsync-core').projectDir = "$rootDir/zsync-core" as File
