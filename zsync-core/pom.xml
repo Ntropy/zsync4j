@@ -30,25 +30,12 @@
       <artifactId>mockito-all</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-servlet</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>src/test/web</directory>
       </testResource>
     </testResources>
   </build>
