@@ -1,3 +1,15 @@
+This is the forked verison of [zsync4j](https://github.com/SalesforceEng/zsync4j).
+# Changlog:
+- adding gradle support
+- updating okhttp from 2.5 to 3.3.1
+- removing Integration Test that needs jetty framewokr of Eclipse
+
+---
+
+
+
+
+
 # zsync4j
 
 zsync4j is a Java port of [zsync](http://zsync.moria.org.uk/). In a nutshell, zsync is rsync over http: it reduces data downloaded for a given file by reusing unchanged parts from an older local version of the file. This can significantly improve download performance, especially for large files with few changes. All the processing is done on the client and no special server-side support is required as zsync uses standard http [Range Requests](https://tools.ietf.org/html/rfc7233) to retrieve non-matching parts of the file.
