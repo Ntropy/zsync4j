@@ -2,12 +2,10 @@ allprojects  {
   apply plugin: 'maven'
 
   group = 'com.salesforce.zsync'
-version = '0.1.0-SNAPSHOT'
+  version = '0.1.0-SNAPSHOT'
 }
 
 subprojects {
-  apply plugin: 'java'
-
   
   repositories {
     mavenLocal()
@@ -15,7 +13,4 @@ subprojects {
     maven { url "http://repo.maven.apache.org/maven2" }
   }
 
-  
-  
-  
 }
