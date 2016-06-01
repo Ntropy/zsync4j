@@ -27,10 +27,7 @@ package com.salesforce.zsync.internal.util;
 
 import org.apache.mina.proxy.utils.MD4;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -114,16 +111,33 @@ public class ZsyncUtil {
     public static File getFile(URI uri) {
         if (uri == null)
             return null;
-        return new File(uri.getPath());
+        try {
+            return new File(uri);
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 
-    public static void copy(InputStream in, File target) {
+    public static void copy(InputStream in, File target) throws NullPointerException, IOException {
         if (target == null)
             throw new NullPointerException("Target file is null");
-        if(target.exists())
+        if (target.exists())
             target.delete();
 
-        OutputStream ostream;
+        target.mkdirs();
+
+        OutputStream out = new FileOutputStream(target);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        if (in != null)
+            in.close();
+        if (out != null)
+            out.close();
+
     }
 
 }

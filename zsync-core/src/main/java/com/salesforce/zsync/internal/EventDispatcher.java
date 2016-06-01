@@ -35,10 +35,10 @@ import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListe
 import okhttp3.Request;
 import okhttp3.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.List;
 
 
@@ -68,10 +68,10 @@ public class EventDispatcher {
         this.observer.zsyncComplete();
     }
 
-    public ResourceTransferListener<Path> getControlFileReadListener() {
-        return new ResourceTransferListener<Path>() {
+    public ResourceTransferListener<File> getControlFileReadListener() {
+        return new ResourceTransferListener<File>() {
             @Override
-            public void start(Path resource, long length) {
+            public void start(File resource, long length) {
                 EventDispatcher.this.observer.controlFileReadingStarted(resource, length);
             }
 
@@ -120,11 +120,11 @@ public class EventDispatcher {
         };
     }
 
-    public ResourceTransferListener<Path> getOutputFileWriteListener() {
-        return new ResourceTransferListener<Path>() {
+    public ResourceTransferListener<File> getOutputFileWriteListener() {
+        return new ResourceTransferListener<File>() {
 
             @Override
-            public void start(Path path, long length) {
+            public void start(File path, long length) {
                 EventDispatcher.this.observer.outputFileWritingStarted(path, length);
             }
 
@@ -140,10 +140,10 @@ public class EventDispatcher {
         };
     }
 
-    public ResourceTransferListener<Path> getInputFileReadListener() {
-        return new ResourceTransferListener<Path>() {
+    public ResourceTransferListener<File> getInputFileReadListener() {
+        return new ResourceTransferListener<File>() {
             @Override
-            public void start(Path resource, long length) {
+            public void start(File resource, long length) {
                 EventDispatcher.this.observer.inputFileReadingStarted(resource, length);
             }
 

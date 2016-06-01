@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,8 +49,6 @@ import static com.google.common.collect.Iterables.limit;
 import static java.lang.Math.min;
 import static java.net.HttpURLConnection.*;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
-import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.util.Collections.newSetFromMap;
 
 /**
@@ -319,21 +316,20 @@ public class HttpClient {
             throws IOException, HttpError {
         final File parent = output.getParentFile();
         final File tmp = new File(parent, output.getName() + ".part");
-        parent.mkdir();
+        parent.mkdirs();
         try (InputStream in = this.get(uri, credentials, listener)) {
-            com.google.common.io.Files.copy();
-            Files.copy(in, tmp, REPLACE_EXISTING);
+            ZsyncUtil.copy(in, tmp);
         }
-        Files.move(tmp, output, REPLACE_EXISTING, ATOMIC_MOVE);
+        tmp.renameTo(output);
     }
 
     /**
      * Opens a connection to the remote resource referred to by the given uri. The returned stream is
      * decorated with to report download progress to the given listener.
      *
-     * @param uri The URI of the resource to retrieve
+     * @param uri         The URI of the resource to retrieve
      * @param credentials The credentials for authenticating with remote hosts
-     * @param listener Listener to monitor long running transfers
+     * @param listener    Listener to monitor long running transfers
      * @return
      * @throws IOException
      * @throws HttpError

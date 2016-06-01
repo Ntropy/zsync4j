@@ -86,7 +86,7 @@ public class ZsyncUtilTest {
     public void testGetPath() throws IOException {
         Path p = Files.createTempFile(null, null);
         try {
-            assertEquals(p, ZsyncUtil.getPath(p.toUri()));
+            assertEquals(p, ZsyncUtil.getFile(p.toUri()));
         } finally {
             Files.delete(p);
         }
@@ -97,7 +97,7 @@ public class ZsyncUtilTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testGetPathIAE() {
-        ZsyncUtil.getPath(URI.create("test"));
+        ZsyncUtil.getFile(URI.create("test"));
     }
 
     /**
@@ -105,7 +105,7 @@ public class ZsyncUtilTest {
      */
     @Test()
     public void testGetPathNull() {
-        assertNull(ZsyncUtil.getPath(URI.create("http://host/test")));
+        assertNull(ZsyncUtil.getFile(URI.create("http://host/test")));
     }
 
 }

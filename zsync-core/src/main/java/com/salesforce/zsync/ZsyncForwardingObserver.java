@@ -30,8 +30,8 @@ import com.google.common.collect.ImmutableList;
 import com.salesforce.zsync.Zsync.Options;
 import com.salesforce.zsync.http.ContentRange;
 
+import java.io.File;
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.List;
 
 import static com.google.common.collect.ImmutableList.copyOf;
@@ -85,7 +85,7 @@ public class ZsyncForwardingObserver extends ZsyncObserver {
     }
 
     @Override
-    public void controlFileReadingStarted(Path path, long length) {
+    public void controlFileReadingStarted(File path, long length) {
         for (ZsyncObserver observer : this.observers) {
             observer.controlFileReadingStarted(path, length);
         }
@@ -99,7 +99,7 @@ public class ZsyncForwardingObserver extends ZsyncObserver {
     }
 
     @Override
-    public void inputFileReadingStarted(Path inputFile, long length) {
+    public void inputFileReadingStarted(File inputFile, long length) {
         for (ZsyncObserver observer : this.observers) {
             observer.inputFileReadingStarted(inputFile, length);
         }
@@ -141,7 +141,7 @@ public class ZsyncForwardingObserver extends ZsyncObserver {
     }
 
     @Override
-    public void outputFileWritingStarted(Path outputFile, long length) {
+    public void outputFileWritingStarted(File outputFile, long length) {
         for (ZsyncObserver observer : this.observers) {
             observer.outputFileWritingStarted(outputFile, length);
         }

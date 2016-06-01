@@ -35,28 +35,17 @@ import com.salesforce.zsync.internal.util.TransferListener;
 import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListener;
 import com.salesforce.zsync.internal.util.ZsyncUtil;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.AtomicMoveNotSupportedException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-
-import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static java.nio.file.StandardOpenOption.*;
-import static java.nio.file.attribute.FileTime.fromMillis;
 
 public class OutputFileWriter implements RangeReceiver, Closeable {
 
     // immutable state
-    private final Path path;
-    private final Path tempPath;
+    private final File path;
+    private final File tempPath;
 
     private final int blockSize;
     private final int lastBlockSize;
@@ -71,7 +60,7 @@ public class OutputFileWriter implements RangeReceiver, Closeable {
     private int blocksRemaining;
     private TransferListener listener;
 
-    public OutputFileWriter(Path path, ControlFile controlFile, ResourceTransferListener<Path> listener)
+    public OutputFileWriter(File path, ControlFile controlFile, ResourceTransferListener<File> listener)
             throws IOException {
         this.path = path;
         this.listener = listener;
@@ -85,17 +74,18 @@ public class OutputFileWriter implements RangeReceiver, Closeable {
 
         listener.start(this.path, this.length);
 
-        final String tmpName = path.getFileName().toString() + ".part";
-        final Path parent = path.getParent();
+        final String tmpName = path.getName().toString() + ".part";
+        final File parent = path.getParentFile();
         if (parent != null) {
-            if (!Files.isDirectory(parent)) {
-                Files.createDirectories(parent);
+            if (!parent.isDirectory()) {
+                parent.mkdirs();
             }
-            this.tempPath = parent.resolve(tmpName);
+            this.tempPath = new File(parent, tmpName);
         } else {
-            this.tempPath = Paths.get(tmpName);
+            this.tempPath = new File(tmpName);
         }
-        this.channel = FileChannel.open(this.tempPath, CREATE, WRITE, READ);
+        //this.channel = FileChannel.open(this.tempPath, CREATE, WRITE, READ);
+        this.channel = new RandomAccessFile(this.tempPath, "rw").getChannel();
 
 
         this.blockSums = ImmutableList.copyOf(controlFile.getBlockSums());
@@ -210,11 +200,16 @@ public class OutputFileWriter implements RangeReceiver, Closeable {
                 throw new ChecksumValidationIOException(this.sha1, calculatedSha1);
             }
             try {
-                Files.move(this.tempPath, this.path, REPLACE_EXISTING, ATOMIC_MOVE);
-            } catch (AtomicMoveNotSupportedException e) {
-                Files.move(this.tempPath, this.path, REPLACE_EXISTING);
+                //Files.move(this.tempPath, this.path, REPLACE_EXISTING, ATOMIC_MOVE);
+                this.tempPath.renameTo(this.path);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Files.setLastModifiedTime(this.path, fromMillis(this.mtime));
+//            catch (AtomicMoveNotSupportedException e) {
+//                Files.move(this.tempPath, this.path, REPLACE_EXISTING);
+//            }
+            //Files.setLastModifiedTime(this.path, fromMillis(this.mtime));
+            this.path.setLastModified(this.mtime);
         } finally {
             this.channel.close();
             this.listener.close();

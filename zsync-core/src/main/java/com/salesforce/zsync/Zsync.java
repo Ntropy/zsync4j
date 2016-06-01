@@ -23,7 +23,6 @@
  */
 package com.salesforce.zsync;
 
-import com.salesforce.zsync.ZsyncStatsObserver.ZsyncStats;
 import com.salesforce.zsync.http.Credentials;
 import com.salesforce.zsync.internal.*;
 import com.salesforce.zsync.internal.util.*;
@@ -34,13 +33,12 @@ import com.salesforce.zsync.internal.util.TransferListener.ResourceTransferListe
 import okhttp3.OkHttpClient;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,53 +104,53 @@ public class Zsync {
 
     // this is just a temporary hacked up CLI for testing purposes
     public static void main(String[] args) throws IOException, ZsyncException {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Must specify at least zsync file url");
-        }
-
-        if (args.length % 2 == 0) {
-            throw new IllegalArgumentException("Must specify pairs of args");
-        }
-
-        final FileSystem fs = FileSystems.getDefault();
-        final Options options = new Options();
-        for (int i = 0; i < args.length - 1; i++) {
-            if ("-A".equals(args[i])) {
-                final String auth = args[++i];
-                final int eq, cl;
-                if ((eq = auth.indexOf('=')) > 0 && (cl = auth.indexOf(':', eq + 1)) > 0) {
-                    options.putCredentials(auth.substring(0, eq),
-                            new Credentials(auth.substring(eq + 1, cl), auth.substring(cl + 1)));
-                } else {
-                    throw new IllegalArgumentException("authenticator must be of form 'hostname=username:password'");
-                }
-            } else if ("-i".equals(args[i])) {
-                options.addInputFile(fs.getPath(args[++i]));
-            } else if ("-o".equals(args[i])) {
-                options.setOutputFile(fs.getPath(args[++i]));
-            }
-        }
-        final URI uri = URI.create(args[args.length - 1]);
-
-        final Zsync zsync = new Zsync(new OkHttpClient());
-        final ZsyncStatsObserver observer = new ZsyncStatsObserver();
-        zsync.zsync(uri, options, observer);
-        final ZsyncStats stats = observer.build();
-        System.out.println("Total bytes written: " + stats.getTotalBytesWritten() + " (by input file: "
-                + stats.getTotalBytesWrittenByInputFile() + ")");
-        System.out.println("Total bytes read: " + stats.getTotalBytesRead() + " (by input file: "
-                + stats.getTotalBytesReadByInputFile() + ")");
-        System.out.println("Total bytes downloaded: " + stats.getTotalBytesDownloaded() + " (control file: "
-                + stats.getBytesDownloadedForControlFile() + ", remote file: " + stats.getBytesDownloadedFromRemoteFile()
-                + ")");
-        System.out.println("Total time: " + stats.getTotalElapsedMilliseconds() + " ms. Of which downloading "
-                + stats.getElapsedMillisecondsDownloading() + " ms");
+//        if (args.length == 0) {
+//            throw new IllegalArgumentException("Must specify at least zsync file url");
+//        }
+//
+//        if (args.length % 2 == 0) {
+//            throw new IllegalArgumentException("Must specify pairs of args");
+//        }
+//
+//        final FileSystem fs = FileSystems.getDefault();
+//        final Options options = new Options();
+//        for (int i = 0; i < args.length - 1; i++) {
+//            if ("-A".equals(args[i])) {
+//                final String auth = args[++i];
+//                final int eq, cl;
+//                if ((eq = auth.indexOf('=')) > 0 && (cl = auth.indexOf(':', eq + 1)) > 0) {
+//                    options.putCredentials(auth.substring(0, eq),
+//                            new Credentials(auth.substring(eq + 1, cl), auth.substring(cl + 1)));
+//                } else {
+//                    throw new IllegalArgumentException("authenticator must be of form 'hostname=username:password'");
+//                }
+//            } else if ("-i".equals(args[i])) {
+//                options.addInputFile(fs.getPath(args[++i]));
+//            } else if ("-o".equals(args[i])) {
+//                options.setOutputFile(fs.getPath(args[++i]));
+//            }
+//        }
+//        final URI uri = URI.create(args[args.length - 1]);
+//
+//        final Zsync zsync = new Zsync(new OkHttpClient());
+//        final ZsyncStatsObserver observer = new ZsyncStatsObserver();
+//        zsync.zsync(uri, options, observer);
+//        final ZsyncStats stats = observer.build();
+//        System.out.println("Total bytes written: " + stats.getTotalBytesWritten() + " (by input file: "
+//                + stats.getTotalBytesWrittenByInputFile() + ")");
+//        System.out.println("Total bytes read: " + stats.getTotalBytesRead() + " (by input file: "
+//                + stats.getTotalBytesReadByInputFile() + ")");
+//        System.out.println("Total bytes downloaded: " + stats.getTotalBytesDownloaded() + " (control file: "
+//                + stats.getBytesDownloadedForControlFile() + ", remote file: " + stats.getBytesDownloadedFromRemoteFile()
+//                + ")");
+//        System.out.println("Total time: " + stats.getTotalElapsedMilliseconds() + " ms. Of which downloading "
+//                + stats.getElapsedMillisecondsDownloading() + " ms");
     }
 
     /**
      * Convenience method for {@link #zsync(URI, Options, ZsyncObserver)} without options or observer. The URI passed to
      * this method must be an absolute HTTP URL. The output file location will be derived from the filename header in the
-     * zsync control file as described in {@link Options#getOutputFile(Path)}. If the output file already exists, zsync
+     * zsync control file as described in {@link Options#getOutputFile(File)}. If the output file already exists, zsync
      * will reuse unchanged blocks, download only changed blocks, and replace the output file upon successful completion.
      * Otherwise, zsync will download the full content from the remote server.
      *
@@ -192,8 +190,8 @@ public class Zsync {
      * <p>
      * The options parameter is optional, i.e. it may be null or empty. It can be used to pass optional parameters to
      * zsync per the documentation on the get and set methods on the {@link Options} class. For example, additional input
-     * files can be specified via {@link Options#addInputFile(Path)}; the output location can be set via
-     * {@link Options#setOutputFile(Path)}.
+     * files can be specified via {@link Options#addInputFile(File)}; the output location can be set via
+     * {@link Options#setOutputFile(File)}.
      * </p>
      * <p>
      * The observer parameter is also optional. Passing a {@link ZsyncObserver} observer enables fine-grained progress and
@@ -229,8 +227,8 @@ public class Zsync {
                 throw new ZsyncControlFileNotFoundException("Zsync file " + zsyncFile + " does not exist.", e);
             }
             throw new ZsyncException("Unexpected Http error retrieving zsync file", e);
-        } catch (NoSuchFileException e) {
-            throw new ZsyncControlFileNotFoundException("Zsync file " + zsyncFile + " does not exist.", e);
+//        } catch (NoSuchFileException e) {
+//            throw new ZsyncControlFileNotFoundException("Zsync file " + zsyncFile + " does not exist.", e);
         } catch (IOException e) {
             throw new ZsyncException("Failed to read zsync control file", e);
         }
@@ -238,11 +236,12 @@ public class Zsync {
         // determine output file location
         File outputFile = options.getOutputFile();
         if (outputFile == null) {
-            outputFile = Paths.get(controlFile.getHeader().getFilename());
+            outputFile = new File(controlFile.getHeader().getFilename());
+            //outputFile = Paths.get(controlFile.getHeader().getFilename());
         }
 
         // use the output file as a seed if it already exists
-        if (Files.exists(outputFile)) {
+        if (outputFile.exists()) {
             options.getInputFiles().add(outputFile);
         }
 
@@ -292,14 +291,14 @@ public class Zsync {
         final InputStream in;
         if (zsyncFile.isAbsolute()) {
             // check if it's a local URI
-            final File file = ZsyncUtil.getFile(zsyncFile);
-            if (file == null) {
+            final File path = ZsyncUtil.getFile(zsyncFile);
+            if (path == null) {
                 // TODO we may want to set the redirect URL resulting from processing the http request
                 options.setZsyncFileSource(zsyncFile);
                 final HttpTransferListener listener = events.getControlFileDownloadListener();
                 final Map<String, Credentials> credentials = options.getCredentials();
                 // check if we should persist the file locally
-                final Path savePath = options.getSaveZsyncFile();
+                final File savePath = options.getSaveZsyncFile();
                 if (savePath == null) {
                     in = httpClient.get(zsyncFile, credentials, listener);
                 } else {
@@ -314,18 +313,18 @@ public class Zsync {
             if (path == null) {
                 throw new IllegalArgumentException("Invalid zsync file URI: path of relative URI missing");
             }
-            in = this.openZsyncFile(Paths.get(path), events);
+            in = this.openZsyncFile(new File(path), events);
         }
         return in;
     }
 
-    private InputStream openZsyncFile(Path zsyncFile, EventDispatcher events) throws IOException {
-        return new ObservableInputStream(Files.newInputStream(zsyncFile), events.getControlFileReadListener());
+    private InputStream openZsyncFile(File zsyncFile, EventDispatcher events) throws IOException {
+        return new ObservableInputStream(new FileInputStream(zsyncFile), events.getControlFileReadListener());
     }
 
     private boolean processInputFiles(OutputFileWriter targetFile, ControlFile controlFile,
-                                      Iterable<? extends Path> inputFiles, EventDispatcher events) throws IOException {
-        for (Path inputFile : inputFiles) {
+                                      Iterable<? extends File> inputFiles, EventDispatcher events) throws IOException {
+        for (File inputFile : inputFiles) {
             if (this.processInputFile(targetFile, controlFile, inputFile, events.getInputFileReadListener())) {
                 return true;
             }
@@ -333,10 +332,11 @@ public class Zsync {
         return false;
     }
 
-    private boolean processInputFile(OutputFileWriter targetFile, ControlFile controlFile, Path inputFile,
-                                     ResourceTransferListener<Path> listener) throws IOException {
+    private boolean processInputFile(OutputFileWriter targetFile, ControlFile controlFile, File inputFile,
+                                     ResourceTransferListener<File> listener) throws IOException {
         final long size;
-        try (final FileChannel fileChannel = FileChannel.open(inputFile);
+        try (final FileChannel fileChannel = new FileInputStream(inputFile).getChannel();
+                     //FileChannel.open(inputFile);
              final ReadableByteChannel channel =
                      new ObservableReadableResourceChannel<>(fileChannel, listener, inputFile, size = fileChannel.size())) {
             final BlockMatcher matcher = BlockMatcher.create(controlFile);
@@ -359,9 +359,9 @@ public class Zsync {
      */
     public static class Options {
 
-        private List<Path> inputFiles = new ArrayList<>(2);
-        private Path outputFile;
-        private Path saveZsyncFile;
+        private List<File> inputFiles = new ArrayList<>(2);
+        private File outputFile;
+        private File saveZsyncFile;
         private URI zsyncUri;
         private Map<String, Credentials> credentials = new HashMap<>(2);
 
@@ -386,7 +386,7 @@ public class Zsync {
          * @param inputFile
          * @return
          */
-        public Options addInputFile(Path inputFile) {
+        public Options addInputFile(File inputFile) {
             this.inputFiles.add(inputFile);
             return this;
         }
@@ -397,7 +397,7 @@ public class Zsync {
          *
          * @return
          */
-        public List<Path> getInputFiles() {
+        public List<File> getInputFiles() {
             return this.inputFiles;
         }
 
@@ -410,7 +410,7 @@ public class Zsync {
          *
          * @return
          */
-        public Path getOutputFile() {
+        public File getOutputFile() {
             return this.outputFile;
         }
 
@@ -420,7 +420,7 @@ public class Zsync {
          * @param outputFile
          * @return
          */
-        public Options setOutputFile(Path outputFile) {
+        public Options setOutputFile(File outputFile) {
             this.outputFile = outputFile;
             return this;
         }
@@ -430,7 +430,7 @@ public class Zsync {
          *
          * @return
          */
-        public Path getSaveZsyncFile() {
+        public File getSaveZsyncFile() {
             return this.saveZsyncFile;
         }
 
@@ -442,7 +442,7 @@ public class Zsync {
          * @param saveZsyncFile
          * @return
          */
-        public Options setSaveZsyncFile(Path saveZsyncFile) {
+        public Options setSaveZsyncFile(File saveZsyncFile) {
             this.saveZsyncFile = saveZsyncFile;
             return this;
         }

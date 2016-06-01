@@ -28,8 +28,8 @@ package com.salesforce.zsync;
 import com.salesforce.zsync.Zsync.Options;
 import com.salesforce.zsync.http.ContentRange;
 
+import java.io.File;
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -51,19 +51,19 @@ public class ZsyncObserver {
     public void controlFileDownloadingComplete() {
     }
 
-    public void controlFileReadingStarted(Path path, long length) {
+    public void controlFileReadingStarted(File path, long length) {
     }
 
     public void controlFileReadingComplete() {
     }
 
-    public void outputFileWritingStarted(Path outputFile, long length) {
+    public void outputFileWritingStarted(File outputFile, long length) {
     }
 
     public void outputFileWritingCompleted() {
     }
 
-    public void inputFileReadingStarted(Path inputFile, long length) {
+    public void inputFileReadingStarted(File inputFile, long length) {
     }
 
     public void inputFileReadingComplete() {

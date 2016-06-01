@@ -31,8 +31,8 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.salesforce.zsync.Zsync.Options;
 import com.salesforce.zsync.http.ContentRange;
 
+import java.io.File;
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -47,8 +47,8 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     // time
     private final Stopwatch downloadStopwatch = Stopwatch.createUnstarted();
     private final Builder<List<ContentRange>, Long> elapsedMillisByRangeRequest = ImmutableMap.builder();
-    private final Builder<Path, Long> bytesWrittenByInputFile = ImmutableMap.builder();
-    private final Builder<Path, Long> bytesReadByInputFile = ImmutableMap.builder();
+    private final Builder<File, Long> bytesWrittenByInputFile = ImmutableMap.builder();
+    private final Builder<File, Long> bytesReadByInputFile = ImmutableMap.builder();
     private long elapsedMillisDownloading = 0;
     private long elapsedMillisDownloadingControlFile = 0;
     private long elapsedMillisDownloadingRemoteFile = 0;
@@ -63,7 +63,7 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     private long totalBytesDownloaded = 0;
     private long bytesDownloadedForControlFile = 0;
     private long bytesDownloadedFromRemoteTarget = 0;
-    private Path inputFile;
+    private File inputFile;
     private long bytesReadBefore;
     private long bytesWrittenBefore;
 
@@ -93,7 +93,7 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     }
 
     @Override
-    public void controlFileReadingStarted(Path path, long length) {
+    public void controlFileReadingStarted(File path, long length) {
         this.bytesRead = 0;
     }
 
@@ -104,7 +104,7 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     }
 
     @Override
-    public void inputFileReadingStarted(Path inputFile, long length) {
+    public void inputFileReadingStarted(File inputFile, long length) {
         this.inputFile = inputFile;
         this.bytesReadBefore = this.totalBytesRead;
         this.bytesWrittenBefore = this.totalBytesWritten;
@@ -123,7 +123,7 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     }
 
     @Override
-    public void outputFileWritingStarted(Path outputFile, long length) {
+    public void outputFileWritingStarted(File outputFile, long length) {
         this.bytesWritten = 0;
     }
 
@@ -178,8 +178,8 @@ public class ZsyncStatsObserver extends ZsyncObserver {
     }
 
     public ZsyncStats build() {
-        final Map<Path, Long> bytesWrittenByInputFile = this.bytesWrittenByInputFile.build();
-        final Map<Path, Long> bytesReadByInputFile = this.bytesReadByInputFile.build();
+        final Map<File, Long> bytesWrittenByInputFile = this.bytesWrittenByInputFile.build();
+        final Map<File, Long> bytesReadByInputFile = this.bytesReadByInputFile.build();
         final long totalElapsedMilliseconds = this.stopwatch.elapsed(TimeUnit.MILLISECONDS);
         final long elapsedMillisecondsDownloading = this.elapsedMillisDownloading;
         final long elapsedMillisecondsDownloadingControlFile = this.elapsedMillisDownloadingControlFile;
@@ -218,12 +218,12 @@ public class ZsyncStatsObserver extends ZsyncObserver {
             }
 
             @Override
-            public Map<Path, Long> getTotalBytesWrittenByInputFile() {
+            public Map<File, Long> getTotalBytesWrittenByInputFile() {
                 return bytesWrittenByInputFile;
             }
 
             @Override
-            public Map<Path, Long> getTotalBytesReadByInputFile() {
+            public Map<File, Long> getTotalBytesReadByInputFile() {
                 return bytesReadByInputFile;
             }
 
@@ -266,9 +266,9 @@ public class ZsyncStatsObserver extends ZsyncObserver {
 
         long getBytesDownloadedFromRemoteFile();
 
-        Map<Path, Long> getTotalBytesWrittenByInputFile();
+        Map<File, Long> getTotalBytesWrittenByInputFile();
 
-        Map<Path, Long> getTotalBytesReadByInputFile();
+        Map<File, Long> getTotalBytesReadByInputFile();
 
         long getTotalElapsedMilliseconds();
 
