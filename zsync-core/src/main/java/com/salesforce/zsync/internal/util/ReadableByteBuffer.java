@@ -1,19 +1,19 @@
 /**
  * Copyright (c) 2015, Salesforce.com, Inc. All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ * <p>
  * Redistributions of source code must retain the above copyright notice, this list of conditions
  * and the following disclaimer.
- * 
+ * <p>
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
  * and the following disclaimer in the documentation and/or other materials provided with the
  * distribution.
- * 
+ * <p>
  * Neither the name of Salesforce.com nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -30,42 +30,42 @@ import java.nio.channels.WritableByteChannel;
 
 /**
  * Read-only view onto a byte buffer
- * 
+ *
  * @author bbusjaeger
  *
  */
 public interface ReadableByteBuffer {
 
-  /**
-   * Returns the length of this block
-   * 
-   * @return
-   */
-  int length();
+    /**
+     * Returns the length of this block
+     *
+     * @return
+     */
+    int length();
 
-  /**
-   * Returns the byte at position i in the current block
-   * 
-   * @param i
-   * @return
-   */
-  byte get(int i);
+    /**
+     * Returns the byte at position i in the current block
+     *
+     * @param i
+     * @return
+     */
+    byte get(int i);
 
-  /**
-   * Bulk operation for writing to channel
-   * 
-   * @param channel
-   * @throws IOException
-   */
-  void write(WritableByteChannel channel) throws IOException;
+    /**
+     * Bulk operation for writing to channel
+     *
+     * @param channel
+     * @throws IOException
+     */
+    void write(WritableByteChannel channel) throws IOException;
 
-  /**
-   * 
-   * @param channel
-   * @param offset
-   * @param length
-   * @throws IOException
-   */
-  void write(WritableByteChannel channel, int offset, int length) throws IOException;
+    /**
+     *
+     * @param channel
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
+    void write(WritableByteChannel channel, int offset, int length) throws IOException;
 
 }

@@ -28,10 +28,9 @@ import java.security.MessageDigestSpi;
  * addition, the MD4 algorithm does not require any large substitution
  * tables.
  *
- * @see The <a href="http://www.ietf.org/rfc/rfc1320.txt">MD4</a> Message-
- *    Digest Algorithm by R. Rivest.
- *
  * @author <a href="http://mina.apache.org">Apache MINA Project</a>
+ * @see The <a href="http://www.ietf.org/rfc/rfc1320.txt">MD4</a> Message-
+ * Digest Algorithm by R. Rivest.
  * @since MINA 2.0.0-M3
  */
 public class MD4 extends MessageDigestSpi {
@@ -47,7 +46,7 @@ public class MD4 extends MessageDigestSpi {
     public static final int BYTE_BLOCK_LENGTH = 64;
 
     /**
-     * The initial values of the four registers. RFC gives the values 
+     * The initial values of the four registers. RFC gives the values
      * in LE so we converted it as JAVA uses BE endianness.
      */
     private final static int A = 0x67452301;
@@ -57,27 +56,21 @@ public class MD4 extends MessageDigestSpi {
     private final static int C = 0x98badcfe;
 
     private final static int D = 0x10325476;
-
-    /**
-     * The four registers initialized with the above IVs.
-     */
-    private int a = A;
-
-    private int b = B;
-
-    private int c = C;
-
-    private int d = D;
-
-    /**
-     * Counts the total length of the data being digested.
-     */
-    private long msgLength;
-
     /**
      * The internal buffer is {@link BLOCK_LENGTH} wide.
      */
     private final byte[] buffer = new byte[BYTE_BLOCK_LENGTH];
+    /**
+     * The four registers initialized with the above IVs.
+     */
+    private int a = A;
+    private int b = B;
+    private int c = C;
+    private int d = D;
+    /**
+     * Counts the total length of the data being digested.
+     */
+    private long msgLength;
 
     /**
      * Default constructor.
@@ -141,9 +134,9 @@ public class MD4 extends MessageDigestSpi {
     protected byte[] engineDigest() {
         byte[] p = pad();
         engineUpdate(p, 0, p.length);
-        byte[] digest = { (byte) a, (byte) (a >>> 8), (byte) (a >>> 16), (byte) (a >>> 24), (byte) b, (byte) (b >>> 8),
+        byte[] digest = {(byte) a, (byte) (a >>> 8), (byte) (a >>> 16), (byte) (a >>> 24), (byte) b, (byte) (b >>> 8),
                 (byte) (b >>> 16), (byte) (b >>> 24), (byte) c, (byte) (c >>> 8), (byte) (c >>> 16), (byte) (c >>> 24),
-                (byte) d, (byte) (d >>> 8), (byte) (d >>> 16), (byte) (d >>> 24) };
+                (byte) d, (byte) (d >>> 8), (byte) (d >>> 16), (byte) (d >>> 24)};
 
         engineReset();
 
@@ -174,15 +167,14 @@ public class MD4 extends MessageDigestSpi {
     }
 
     /**
-     * Pads the buffer by appending the byte 0x80, then append as many zero 
-     * bytes as necessary to make the buffer length a multiple of 64 bytes.  
+     * Pads the buffer by appending the byte 0x80, then append as many zero
+     * bytes as necessary to make the buffer length a multiple of 64 bytes.
      * The last 8 bytes will be filled with the length of the buffer in bits.
-     * If there's no room to store the length in bits in the block i.e the block 
+     * If there's no room to store the length in bits in the block i.e the block
      * is larger than 56 bytes then an additionnal 64-bytes block is appended.
-     * 
-     * @see sections 3.1 & 3.2 of the RFC 1320.
-     * 
+     *
      * @return the pad byte array
+     * @see sections 3.1 & 3.2 of the RFC 1320.
      */
     private byte[] pad() {
         int pos = (int) (msgLength % BYTE_BLOCK_LENGTH);
@@ -201,11 +193,11 @@ public class MD4 extends MessageDigestSpi {
         return pad;
     }
 
-    /** 
+    /**
      * Process one 64-byte block. Algorithm is constituted by three rounds.
      * Note that F, G and H functions were inlined for improved performance.
-     * 
-     * @param in the byte array to process
+     *
+     * @param in     the byte array to process
      * @param offset the offset at which the 64-byte block is stored
      */
     private void process(byte[] in, int offset) {

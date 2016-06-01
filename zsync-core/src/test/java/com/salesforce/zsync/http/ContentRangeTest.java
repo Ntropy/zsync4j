@@ -1,21 +1,21 @@
 /**
  * Copyright (c) 2015, Salesforce.cimport static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-lowing conditions are met:
- * 
+ * import static org.junit.Assert.assertFalse;
+ * import static org.junit.Assert.assertTrue;
+ * <p>
+ * import org.junit.Test;
+ * lowing conditions are met:
+ * <p>
  * Redistributions of source code must retain the above copyright notice, this list of conditions
  * and the following disclaimer.
- * 
+ * <p>
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
  * and the following disclaimer in the documentation and/or other materials provided with the
  * distribution.
- * 
+ * <p>
  * Neither the name of Salesforce.com nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -27,70 +27,66 @@ lowing conditions are met:
  */
 package com.salesforce.zsync.http;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
-import com.salesforce.zsync.http.ContentRange;
+import static org.junit.Assert.*;
 
 public class ContentRangeTest {
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testConstructorFirstAfterLast() {
-    new ContentRange(2, 1);
-  }
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorFirstAfterLast() {
+        new ContentRange(2, 1);
+    }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testConstructorFirstNegative() {
-    new ContentRange(-1, 1);
-  }
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorFirstNegative() {
+        new ContentRange(-1, 1);
+    }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testConstructorSecondNegative() {
-    new ContentRange(1, -1);
-  }
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorSecondNegative() {
+        new ContentRange(1, -1);
+    }
 
-  @Test
-  public void testLength() {
-    assertEquals(2, new ContentRange(1, 2).length());
-  }
+    @Test
+    public void testLength() {
+        assertEquals(2, new ContentRange(1, 2).length());
+    }
 
-  @Test
-  public void testLengthSingle() {
-    assertEquals(1, new ContentRange(2, 2).length());
-  }
+    @Test
+    public void testLengthSingle() {
+        assertEquals(1, new ContentRange(2, 2).length());
+    }
 
-  @Test
-  public void testSame() {
-    final ContentRange r = new ContentRange(1, 2);
-    assertTrue(r.equals(r));
-  }
+    @Test
+    public void testSame() {
+        final ContentRange r = new ContentRange(1, 2);
+        assertTrue(r.equals(r));
+    }
 
-  @Test
-  public void testUnequalNull() {
-    assertFalse(new ContentRange(1, 2).equals(null));
-  }
+    @Test
+    public void testUnequalNull() {
+        assertFalse(new ContentRange(1, 2).equals(null));
+    }
 
-  @Test
-  public void testUnequalOtherType() {
-    assertFalse(new ContentRange(1, 2).equals(1));
-  }
+    @Test
+    public void testUnequalOtherType() {
+        assertFalse(new ContentRange(1, 2).equals(1));
+    }
 
-  @Test
-  public void testUnequalFirst() {
-    assertFalse(new ContentRange(1, 3).equals(new ContentRange(2, 3)));
-  }
+    @Test
+    public void testUnequalFirst() {
+        assertFalse(new ContentRange(1, 3).equals(new ContentRange(2, 3)));
+    }
 
-  @Test
-  public void testUnequalSecond() {
-    assertFalse(new ContentRange(1, 2).equals(new ContentRange(1, 3)));
-  }
+    @Test
+    public void testUnequalSecond() {
+        assertFalse(new ContentRange(1, 2).equals(new ContentRange(1, 3)));
+    }
 
-  @Test
-  public void testEqual() {
-    assertTrue(new ContentRange(1, 2).equals(new ContentRange(1, 2)));
-  }
+    @Test
+    public void testEqual() {
+        assertTrue(new ContentRange(1, 2).equals(new ContentRange(1, 2)));
+    }
 
 }

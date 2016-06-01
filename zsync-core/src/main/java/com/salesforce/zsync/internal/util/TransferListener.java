@@ -1,19 +1,19 @@
 /**
  * Copyright (c) 2015, Salesforce.com, Inc. All rights reserved.
- * 
+ * <p>
  * Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met:
- * 
+ * <p>
  * Redistributions of source code must retain the above copyright notice, this list of conditions
  * and the following disclaimer.
- * 
+ * <p>
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions
  * and the following disclaimer in the documentation and/or other materials provided with the
  * distribution.
- * 
+ * <p>
  * Neither the name of Salesforce.com nor the names of its contributors may be used to endorse or
  * promote products derived from this software without specific prior written permission.
- * 
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
@@ -35,30 +35,30 @@ import java.io.IOException;
  */
 public interface TransferListener extends Closeable {
 
-  /**
-   * Indicates that the given number of bytes have been transferred
-   * 
-   * @param bytes number of bytes transferred
-   */
-  void transferred(long bytes);
+    /**
+     * Indicates that the given number of bytes have been transferred
+     *
+     * @param bytes number of bytes transferred
+     */
+    void transferred(long bytes);
 
-  /**
-   * Indicates that the transfer has finished. The transfer may have completed successfully or not.
-   */
-  @Override
-  void close() throws IOException;
+    /**
+     * Indicates that the transfer has finished. The transfer may have completed successfully or not.
+     */
+    @Override
+    void close() throws IOException;
 
-  /**
-   * 
-   * Notified when resource transfer is started
-   *
-   * @author bbusjaeger
-   * @param <T> Type of resource being transferred
-   */
-  public static interface ResourceTransferListener<T> extends TransferListener {
+    /**
+     *
+     * Notified when resource transfer is started
+     *
+     * @author bbusjaeger
+     * @param <T> Type of resource being transferred
+     */
+    public static interface ResourceTransferListener<T> extends TransferListener {
 
-    void start(T resource, long length);
+        void start(T resource, long length);
 
-  }
+    }
 
 }
