@@ -48,6 +48,7 @@ public class Header {
     private final boolean seqMatches;
     private final String url;
     private final String sha1;
+
     public Header(String version, String filename, Date mtime, int blocksize, long length, int checksumBytes,
                   int rsumBytes, boolean seqMatches, String url, String sha1) {
         this.version = version;

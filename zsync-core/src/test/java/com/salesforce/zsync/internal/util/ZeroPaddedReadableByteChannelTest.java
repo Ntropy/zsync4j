@@ -47,7 +47,7 @@ public class ZeroPaddedReadableByteChannelTest {
      * Test factor method: creates a padded channel off of a byte array with the given number of
      * zeros.
      *
-     * @param b byte array to construct underlying channel from
+     * @param b   byte array to construct underlying channel from
      * @param num number of zeros to bad with
      * @return padded channel
      */

@@ -336,7 +336,7 @@ public class Zsync {
                                      ResourceTransferListener<File> listener) throws IOException {
         final long size;
         try (final FileChannel fileChannel = new FileInputStream(inputFile).getChannel();
-                     //FileChannel.open(inputFile);
+             //FileChannel.open(inputFile);
              final ReadableByteChannel channel =
                      new ObservableReadableResourceChannel<>(fileChannel, listener, inputFile, size = fileChannel.size())) {
             final BlockMatcher matcher = BlockMatcher.create(controlFile);

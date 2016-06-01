@@ -34,7 +34,6 @@ import java.nio.channels.WritableByteChannel;
  * Efficient rolling window over a byte channel.
  *
  * @author bbusjaeger
- *
  */
 public class RollingBuffer implements ReadableByteBuffer {
 
@@ -50,10 +49,10 @@ public class RollingBuffer implements ReadableByteBuffer {
      * reading at least a full window size from the channel. If the channel does not contain
      * sufficient data to fill a window, an IllegalArgumentException is thrown.
      *
-     * @param channel Channel to roll over
+     * @param channel    Channel to roll over
      * @param windowSize Size of the window into the channel, must be positive.
      * @param bufferSize Size of the buffer underlying the window, i.e. how many bytes to hold in
-     *        memory at any given time. Must be greater than equal to twice the window size.
+     *                   memory at any given time. Must be greater than equal to twice the window size.
      * @throws IOException If reading the channel fails
      */
     public RollingBuffer(ReadableByteChannel channel, int windowSize, int bufferSize) throws IOException {
@@ -80,10 +79,10 @@ public class RollingBuffer implements ReadableByteBuffer {
      * Advances the window by the given number of bytes.
      *
      * @param bytes Number of bytes to advance the window by. Must the in the interval [0,
-     *        windowSize].
+     *              windowSize].
      * @return True if window was successfully advanced by the given number of bytes. False,
-     *         otherwise, i.e. if the channel does not contain enough bytes to advance the window by
-     *         the request number.
+     * otherwise, i.e. if the channel does not contain enough bytes to advance the window by
+     * the request number.
      * @throws IOException
      */
     public boolean advance(int bytes) throws IOException {
@@ -163,7 +162,7 @@ public class RollingBuffer implements ReadableByteBuffer {
      * needed bytes.
      *
      * @param needed Number of bytes needed in the underlying buffer beyond the end of the current
-     *        window
+     *               window
      * @return True if the needed number of bytes could be made available, false otherwise.
      * @throws IOException
      */

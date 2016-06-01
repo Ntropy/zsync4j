@@ -35,6 +35,7 @@ public class ControlFile {
 
     private final Header header;
     private final List<? extends BlockSum> blockSums;
+
     public ControlFile(Header header, List<? extends BlockSum> blockSums) {
         super();
         this.header = header;

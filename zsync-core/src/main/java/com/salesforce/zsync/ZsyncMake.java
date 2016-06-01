@@ -72,7 +72,7 @@ public class ZsyncMake {
      * Creates a zsync control file for the specified input file in the same directory as the input file.
      * <p>
      * Usage:
-     *
+     * <p>
      * <pre>
      * java -classpath &lt;path-to-zsync4j-jar&gt; com.salesforce.zsync4j.ZsyncMake &lt;path-to-input-file&gt;
      * </pre>
@@ -162,7 +162,7 @@ public class ZsyncMake {
      * closed.
      *
      * @param outputStream The stream to which zsync control data will be written.
-     * @param inputFile Specifies the file for which the control data will be calculated.
+     * @param inputFile    Specifies the file for which the control data will be calculated.
      * @return The {@link Results results} of the zsyncmake operation.
      */
     public Result writeToStream(Path inputFile, OutputStream outputStream) {
@@ -174,8 +174,8 @@ public class ZsyncMake {
      * {@link Options}. The output stream is not closed.
      *
      * @param outputStream The stream to which zsync control data will be written.
-     * @param inputFile Specifies the file for which the control data will be calculated.
-     * @param options Advanced options for the zsyncmake operation.
+     * @param inputFile    Specifies the file for which the control data will be calculated.
+     * @param options      Advanced options for the zsyncmake operation.
      * @return The {@link Results results} of the zsyncmake operation.
      */
     public Result writeToStream(Path inputFile, OutputStream outputStream, Options options) {
@@ -191,7 +191,7 @@ public class ZsyncMake {
      *
      * @param inputFile Specifies the file for which the corresponding .zsync file will be written.
      * @return The {@link FileResult results} of the zsyncmake operation. The resulting .zsync file can be accessed via
-     *         {@link FileResult#getOutputFile() results.getOutputFile()}.
+     * {@link FileResult#getOutputFile() results.getOutputFile()}.
      */
     public FileResult writeToFile(Path inputFile) {
         return this.writeToFile(inputFile, new Options());
@@ -202,10 +202,10 @@ public class ZsyncMake {
      * file must end with .zsync.
      *
      * @param outputFile Specifies the file where the zsync control data will be written. If the file already exists it
-     *        will be overwritten.
-     * @param inputFile Specifies the file for which the corresponding .zsync file will be written.
+     *                   will be overwritten.
+     * @param inputFile  Specifies the file for which the corresponding .zsync file will be written.
      * @return The {@link FileResult results} of the zsyncmake operation. The resulting .zsync file can be accessed via
-     *         {@link FileResult#getOutputFile() results.getOutputFile()}.
+     * {@link FileResult#getOutputFile() results.getOutputFile()}.
      */
     public FileResult writeToFile(Path inputFile, Path outputFile) {
         return this.writeToFile(inputFile, outputFile, new Options());
@@ -217,9 +217,9 @@ public class ZsyncMake {
      * ".zsync" on the end.
      *
      * @param inputFile Specifies the file for which the corresponding .zsync file will be written.
-     * @param options Advanced options for the zsyncmake operation.
+     * @param options   Advanced options for the zsyncmake operation.
      * @return The {@link FileResult results} of the zsyncmake operation. The resulting .zsync file can be accessed via
-     *         {@link FileResult#getOutputFile() results.getOutputFile()}.
+     * {@link FileResult#getOutputFile() results.getOutputFile()}.
      */
     public FileResult writeToFile(Path inputFile, Options options) {
         if (inputFile == null) {
@@ -233,11 +233,11 @@ public class ZsyncMake {
      * {@link Options}. The filename of the output file must end with .zsync.
      *
      * @param outputFile Specifies the file where the zsync control data will be written. If the file already exists it
-     *        will be overwritten.
-     * @param inputFile Specifies the file for which the corresponding .zsync file will be written.
-     * @param options Advanced options for the zsyncmake operation.
+     *                   will be overwritten.
+     * @param inputFile  Specifies the file for which the corresponding .zsync file will be written.
+     * @param options    Advanced options for the zsyncmake operation.
      * @return The {@link FileResult results} of the zsyncmake operation. The resulting .zsync file can be accessed via
-     *         {@link FileResult#getOutputFile() results.getOutputFile()}.
+     * {@link FileResult#getOutputFile() results.getOutputFile()}.
      */
     public FileResult writeToFile(Path inputFile, Path outputFile, Options options) {
         if (outputFile == null) {
@@ -345,10 +345,10 @@ public class ZsyncMake {
      * file-level checksum, which for SHA-1 is 20 bytes.
      *
      * @param fileLength Length of the inputFile in bytes
-     * @param weakLen Number of bytes to store for weak checksum in bytes
-     * @param strongLen Number of bytes to store for strong checksum in bytes
+     * @param weakLen    Number of bytes to store for weak checksum in bytes
+     * @param strongLen  Number of bytes to store for strong checksum in bytes
      * @return byte buffer containing both block and file checksums. The block is returned ready for reading: position at
-     *         0 and limit at capacity.
+     * 0 and limit at capacity.
      * @throws IOException
      */
     private ByteBuffer computeChecksums(final Path inputFile, final int blockSize, final long fileLength,
@@ -413,7 +413,7 @@ public class ZsyncMake {
      * Used to supply advanced options to the zsyncmake operation.
      * <p>
      * Usage:
-     *
+     * <p>
      * <pre>
      * Options options = new Options();
      * options.setBlockSize(desiredBlockSize);

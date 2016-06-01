@@ -30,7 +30,6 @@ package com.salesforce.zsync;
  * An exception indicating that a zsync control file could not be found.
  *
  * @author bbusjaeger
- *
  */
 public class ZsyncControlFileNotFoundException extends ZsyncException {
 

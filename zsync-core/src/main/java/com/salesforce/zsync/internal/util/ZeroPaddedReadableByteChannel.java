@@ -34,7 +34,6 @@ import java.nio.channels.ReadableByteChannel;
  * channel has reached the end of the stream.
  *
  * @author bbusjaeger
- *
  */
 public class ZeroPaddedReadableByteChannel implements ReadableByteChannel {
 
@@ -46,7 +45,7 @@ public class ZeroPaddedReadableByteChannel implements ReadableByteChannel {
      * Constructs a new padded channel
      *
      * @param channel Channel to pad with zeros
-     * @param zeros number of zeros to append to the channel, must be greater or equal to 1
+     * @param zeros   number of zeros to append to the channel, must be greater or equal to 1
      */
     public ZeroPaddedReadableByteChannel(ReadableByteChannel channel, int zeros) {
         if (channel == null) {

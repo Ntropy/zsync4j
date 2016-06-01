@@ -49,6 +49,7 @@ public class DoubleBlockMatcher extends BlockMatcher {
     private State state;
     private List<Integer> matches;
     private byte firstByte;
+
     public DoubleBlockMatcher(ControlFile controlFile) {
         final Header header = controlFile.getHeader();
         this.blockSize = header.getBlocksize();

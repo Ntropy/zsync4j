@@ -32,7 +32,6 @@ import java.nio.channels.WritableByteChannel;
  * Read-only view onto a byte buffer
  *
  * @author bbusjaeger
- *
  */
 public interface ReadableByteBuffer {
 
@@ -60,7 +59,6 @@ public interface ReadableByteBuffer {
     void write(WritableByteChannel channel) throws IOException;
 
     /**
-     *
      * @param channel
      * @param offset
      * @param length

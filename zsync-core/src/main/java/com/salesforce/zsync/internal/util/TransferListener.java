@@ -49,11 +49,10 @@ public interface TransferListener extends Closeable {
     void close() throws IOException;
 
     /**
-     *
      * Notified when resource transfer is started
      *
-     * @author bbusjaeger
      * @param <T> Type of resource being transferred
+     * @author bbusjaeger
      */
     public static interface ResourceTransferListener<T> extends TransferListener {
 

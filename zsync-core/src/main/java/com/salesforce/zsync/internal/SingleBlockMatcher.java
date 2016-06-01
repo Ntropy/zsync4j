@@ -43,6 +43,7 @@ public class SingleBlockMatcher extends BlockMatcher {
     private State state;
     private MutableBlockSum blockSum;
     private byte firstByte;
+
     public SingleBlockMatcher(ControlFile controlFile) {
         final Header header = controlFile.getHeader();
         this.blockSize = header.getBlocksize();

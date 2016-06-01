@@ -36,7 +36,6 @@ import java.security.MessageDigest;
  * safe and is always open, so it should really only be used internally.
  *
  * @author bbusjaeger
- *
  */
 public class WritableMessageDigest implements WritableByteChannel {
 
