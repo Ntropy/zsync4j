@@ -25,15 +25,14 @@
  */
 package com.salesforce.zsync.internal;
 
+import com.salesforce.zsync.internal.util.ZsyncUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import static com.salesforce.zsync.Zsync.VERSION;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -149,9 +148,7 @@ public class Header {
                 sha1 = value;
             } else if ("MTime".equals(name)) {
                 try {
-                    SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z", Locale.US);
-                    format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                    mtime = format.parse(value);
+                    mtime = ZsyncUtil.LAST_MODIFIED_TIME_FORMAT.parse(value);
                 } catch (ParseException e) {
                     throwInvalidHeaderValue(name, value);
                 }
