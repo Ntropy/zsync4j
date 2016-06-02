@@ -34,11 +34,24 @@ import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class ZsyncUtil {
 
     private static final char[] HEX_CODE = "0123456789abcdef".toCharArray();
     private static final Provider md4Provider;
+
+
+    @SuppressWarnings("serial")
+    public static final SimpleDateFormat LAST_MODIFIED_TIME_FORMAT =
+            new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z", Locale.US) {
+                {
+                    this.setTimeZone(TimeZone.getTimeZone("GMT"));
+                }
+            };
+
 
     static {
         md4Provider = new Provider("MD4Provider", 1d, "implements md4") {

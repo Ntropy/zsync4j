@@ -32,6 +32,8 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.salesforce.zsync.Zsync.VERSION;
 import static java.nio.charset.StandardCharsets.US_ASCII;
@@ -147,7 +149,9 @@ public class Header {
                 sha1 = value;
             } else if ("MTime".equals(name)) {
                 try {
-                    mtime = new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z").parse(value);
+                    SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z", Locale.US);
+                    format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                    mtime = format.parse(value);
                 } catch (ParseException e) {
                     throwInvalidHeaderValue(name, value);
                 }

@@ -40,10 +40,8 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.TimeZone;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
@@ -56,13 +54,15 @@ public class ZsyncMake {
 
     private static final int BLOCK_SIZE_SMALL = 2048;
     private static final int BLOCK_SIZE_LARGE = 4096;
-    @SuppressWarnings("serial")
-    private static final SimpleDateFormat LAST_MODIFIED_TIME_FORMAT =
-            new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z") {
-                {
-                    this.setTimeZone(TimeZone.getTimeZone("GMT"));
-                }
-            };
+
+    // move to ZsyncUtil to be common on both client and server sides
+//    @SuppressWarnings("serial")
+//    private static final SimpleDateFormat LAST_MODIFIED_TIME_FORMAT =
+//            new SimpleDateFormat("EEE, dd MMMMM yyyy HH:mm:ss Z", Locale.US) {
+//                {
+//                    this.setTimeZone(TimeZone.getTimeZone("GMT"));
+//                }
+//            };
     public static String ZSYNC_VERSION = "0.6.2";
 
     public ZsyncMake() {
@@ -140,7 +140,7 @@ public class ZsyncMake {
     private static String getFormattedLastModifiedTime(Path file) {
         try {
             long lastModifiedTime = Files.readAttributes(file, BasicFileAttributes.class).lastModifiedTime().toMillis();
-            return LAST_MODIFIED_TIME_FORMAT.format(new Date(lastModifiedTime));
+            return ZsyncUtil.LAST_MODIFIED_TIME_FORMAT.format(new Date(lastModifiedTime));
         } catch (IOException exception) {
             throw new RuntimeException("Could not read last modified time from file: " + file.getFileName(), exception);
         }
