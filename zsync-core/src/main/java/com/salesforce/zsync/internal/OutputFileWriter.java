@@ -174,9 +174,11 @@ public class OutputFileWriter implements RangeReceiver, Closeable {
         final ReadableByteChannel src = Channels.newChannel(in);
         final long length = range.length();
         long remaining = length;
+        long position = range.first();
         do {
-            long transferred = this.channel.transferFrom(src, range.first(), length);
+            long transferred = this.channel.transferFrom(src, position, length);
             remaining -= transferred;
+            position += transferred;
             this.listener.transferred(transferred);
         } while (remaining > 0);
 
